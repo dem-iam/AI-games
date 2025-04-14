@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pixel Shooter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="game-container">
+        <div id="ui">
+            <div>Health: <span id="health">100</span></div>
+            <div>Souls: <span id="score">0</span></div>
+            <div>Room: <span id="room">1</span></div>
+        </div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="start-screen">
+            <h1 class="text-4xl mb-8 pixel-font">PIXEL SHOOTER</h1>
+            <p class="mb-12 text-xl pixel-font">WASD to move, SPACE to shoot</p>
+            <button id="start-button" class="pixel-button">START GAME</button>
+	        <a href="../index.html" class="pixel-button">EXIT</a>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
