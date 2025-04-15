@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataStorm - Cyber Shooter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-900 text-blue-400 font-mono overflow-hidden">
+    <div class="relative w-full h-screen flex flex-col">
+        <!-- Game Header -->
+        <div class="flex justify-between items-center p-4 border-b border-blue-800 bg-gray-900/50">
+            <h1 class="text-2xl font-bold cyber-text">DATA<span class="text-blue-600">STORM</span></h1>
+            <div class="flex space-x-4">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-shield-alt text-blue-400"></i>
+                    <span id="health">100%</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-bolt text-yellow-400"></i>
+                    <span id="score">0</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-layer-group text-purple-400"></i>
+                    <span id="level">1</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-coins text-yellow-400"></i>
+                    <span id="upgradePoints">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Container -->
+        <div class="relative flex-1 flex justify-center items-center">
+            <canvas id="gameCanvas" class="border border-blue-900/50 rounded-lg shadow-lg shadow-blue-900/20"></canvas>
+            
+            <!-- Start Screen -->
+            <div id="startScreen" class="absolute inset-0 flex flex-col justify-center items-center bg-gray-900/90 z-10">
+                <h2 class="text-4xl font-bold mb-6 cyber-text">DATA<span class="text-blue-600">STORM</span></h2>
+                <p class="text-blue-300 mb-8 max-w-md text-center px-4">
+                    Defend the core database from malicious data packets in this high-speed information warfare.
+                    Earn upgrade points to enhance your capabilities between levels.
+                </p>
+                <button id="startButton" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all transform hover:scale-105 glow">
+                    INITIATE SYSTEM
+                </button>
+                <div class="mt-8 text-blue-300 text-sm">
+                    <p>CONTROLS: WASD or Arrow Keys to move | Mouse to aim | Left Click to shoot</p>
+                </div>
+            </div>
+            
+            <!-- Upgrade Screen -->
+            <div id="upgradeScreen" class="absolute inset-0 flex-col justify-center items-center bg-gray-900/95 z-20 hidden p-4 overflow-y-auto">
+                <h2 class="text-3xl font-bold mb-6 cyber-text">UPGRADE <span class="text-blue-600">STATION</span></h2>
+                <p class="text-blue-300 mb-4">You have <span id="availablePoints" class="text-yellow-400 font-bold">0</span> upgrade points to spend</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl w-full">
+                    <!-- Fire Rate Upgrade -->
+                    <div class="upgrade-card bg-gray-800 p-4 rounded-lg cursor-pointer" onclick="purchaseUpgrade('fireRate')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-blue-400"><i class="fas fa-tachometer-alt mr-2"></i>Fire Rate</h3>
+                            <span class="text-yellow-400 font-mono">Cost: <span id="fireRateCost">5</span></span>
+                        </div>
+                        <p class="text-blue-300 text-sm mb-3">Reduce delay between shots by 20%</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="fireRateBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-right text-xs mt-1">Level <span id="fireRateLevel">0</span>/5</p>
+                    </div>
+                    
+                    <!-- Damage Upgrade -->
+                    <div class="upgrade-card bg-gray-800 p-4 rounded-lg cursor-pointer" onclick="purchaseUpgrade('damage')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-blue-400"><i class="fas fa-fist-raised mr-2"></i>Damage</h3>
+                            <span class="text-yellow-400 font-mono">Cost: <span id="damageCost">5</span></span>
+                        </div>
+                        <p class="text-blue-300 text-sm mb-3">Increase bullet damage by 1 per level</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="damageBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-right text-xs mt-1">Level <span id="damageLevel">0</span>/5</p>
+                    </div>
+                    
+                    <!-- Health Upgrade -->
+                    <div class="upgrade-card bg-gray-800 p-4 rounded-lg cursor-pointer" onclick="purchaseUpgrade('health')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-blue-400"><i class="fas fa-heart mr-2"></i>Health</h3>
+                            <span class="text-yellow-400 font-mono">Cost: <span id="healthCost">5</span></span>
+                        </div>
+                        <p class="text-blue-300 text-sm mb-3">Increase max health by 20% per level</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="healthBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-right text-xs mt-1">Level <span id="healthLevel">0</span>/5</p>
+                    </div>
+                    
+                    <!-- Speed Upgrade -->
+                    <div class="upgrade-card bg-gray-800 p-4 rounded-lg cursor-pointer" onclick="purchaseUpgrade('speed')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-blue-400"><i class="fas fa-running mr-2"></i>Speed</h3>
+                            <span class="text-yellow-400 font-mono">Cost: <span id="speedCost">5</span></span>
+                        </div>
+                        <p class="text-blue-300 text-sm mb-3">Increase movement speed by 10% per level</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="speedBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-right text-xs mt-1">Level <span id="speedLevel">0</span>/5</p>
+                    </div>
+                    
+                    <!-- Bullet Speed Upgrade -->
+                    <div class="upgrade-card bg-gray-800 p-4 rounded-lg cursor-pointer" onclick="purchaseUpgrade('bulletSpeed')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-blue-400"><i class="fas fa-bolt mr-2"></i>Bullet Speed</h3>
+                            <span class="text-yellow-400 font-mono">Cost: <span id="bulletSpeedCost">5</span></span>
+                        </div>
+                        <p class="text-blue-300 text-sm mb-3">Increase bullet speed by 15% per level</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="bulletSpeedBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-right text-xs mt-1">Level <span id="bulletSpeedLevel">0</span>/5</p>
+                    </div>
+                    
+                    <!-- Data Node Health -->
+                    <div class="upgrade-card bg-gray-800 p-4 rounded-lg cursor-pointer" onclick="purchaseUpgrade('nodeHealth')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-xl font-bold text-blue-400"><i class="fas fa-database mr-2"></i>Node Health</h3>
+                            <span class="text-yellow-400 font-mono">Cost: <span id="nodeHealthCost">5</span></span>
+                        </div>
+                        <p class="text-blue-300 text-sm mb-3">Increase data node durability by 1 per level</p>
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="nodeHealthBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                        <p class="text-right text-xs mt-1">Level <span id="nodeHealthLevel">0</span>/5</p>
+                    </div>
+                </div>
+                
+                <button id="continueButton" class="mt-8 px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all transform hover:scale-105">
+                    CONTINUE TO LEVEL <span id="nextLevel">2</span>
+                </button>
+            </div>
+            
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="absolute inset-0 flex-col justify-center items-center bg-gray-900/90 z-10 hidden">
+                <h2 class="text-4xl font-bold mb-2 text-red-500 cyber-text">SYSTEM BREACH</h2>
+                <p class="text-2xl mb-2 cyber-text">FINAL SCORE: <span id="finalScore" class="text-blue-400">0</span></p>
+                <p class="text-lg mb-6 text-yellow-400">Upgrades unlocked: <span id="finalUpgrades">0</span></p>
+                <button id="restartButton" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all transform hover:scale-105">
+                    REBOOT SYSTEM
+                </button>
+            </div>
+            
+            <!-- Scanline effect -->
+            <div class="scanline"></div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="p-2 text-center text-xs text-blue-900 border-t border-blue-800 bg-gray-900/50">
+            <p>CYBER DEFENSE PROTOCOL v2.5.0 | UPGRADE SYSTEM ACTIVE</p>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
