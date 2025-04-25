@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: #0a0a1a;
+    color: #00ff41;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.game-info {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 20px;
+    z-index: 100;
+}
+
+.info-box {
+    background: rgba(10, 10, 26, 0.8);
+    border: 1px solid #00ff41;
+    padding: 8px 12px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+.progress-bar {
+    width: 100px;
+    height: 8px;
+    background: #0a0a1a;
+    border: 1px solid #00ff41;
+    margin-top: 4px;
+}
+
+.progress {
+    height: 100%;
+    background: #00ff41;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #0a0a1a;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.glow {
+    text-shadow: 0 0 10px #00ff41;
+}
+
+.cyber-button {
+    background: linear-gradient(145deg, #0a0a1a, #1a1a2a);
+    border: 1px solid #00ff41;
+    color: #00ff41;
+    padding: 10px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    margin: 5px;
+}
+
+.cyber-button:hover {
+    background: linear-gradient(145deg, #1a1a2a, #0a0a1a);
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+    transform: translateY(-2px);
+}
+
+.scan-line {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, 
+        rgba(0, 255, 65, 0) 0%, 
+        rgba(0, 255, 65, 0.1) 50%, 
+        rgba(0, 255, 65, 0) 100%);
+    pointer-events: none;
+    animation: scan 8s linear infinite;
+    opacity: 0.3;
+    z-index: 50;
+}
+
+@keyframes scan {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+.text-center {
+    text-align: center;
+}
+
+.max-w-md {
+    max-width: 28rem;
+}

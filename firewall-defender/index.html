@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Firewall Defender</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scan-line"></div>
+    
+    <div class="game-info">
+        <div class="info-box">
+            <p>WAVE: <span id="level">1</span></p>
+            <div class="progress-bar">
+                <div id="waveProgress" class="progress"></div>
+            </div>
+        </div>
+        <div class="info-box">
+            <p>SCORE: <span id="score">0</span></p>
+        </div>
+    </div>
+    
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="gameOver" class="overlay hidden">
+            <h2 class="text-3xl font-bold glow mb-4">SYSTEM BREACHED</h2>
+            <p class="text-xl mb-6">Final Score: <span id="finalScore" class="font-bold">0</span></p>
+            <button id="restartButton" class="cyber-button">REBOOT SYSTEM</button>
+        </div>
+        <div id="startScreen" class="overlay">
+            <h2 class="text-3xl font-bold glow mb-4">DATA FIREWALL</h2>
+            <p class="text-lg mb-8 max-w-md text-center">Protect data nodes from incoming threats. Use mouse/touch or arrow keys to move the firewall.</p>
+            <button id="startButton" class="cyber-button">ACTIVATE FIREWALL</button>
+        </div>
+        <div id="pauseScreen" class="overlay hidden">
+            <h2 class="text-3xl font-bold glow mb-4">SYSTEM PAUSED</h2>
+            <button id="resumeButton" class="cyber-button">RESUME</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
